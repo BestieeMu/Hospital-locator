@@ -14,21 +14,23 @@ import L from "leaflet";
 // import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 // import "leaflet-control-geocoder/dist/Control.Geocoder.js";
 // import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import "./map.css";
 
 const Map = () => {
   const [position, setPosition] = useState(null);
   const [searchLocation, setSearchLocation] = useState("");
-  const [placeName, setPlaceName] = useState('');
+  const [placeName, setPlaceName] = useState("");
   const [hospitals, setHospitals] = useState([]);
-  const [lan, setLan] = useState()
-  const [lon, setLon] = useState()
+  const [lan, setLan] = useState();
+  const [lon, setLon] = useState();
+  
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setPosition([position.coords.latitude, position.coords.longitude]);
-        setLan(position.coords.latitude)
-        setLon(position.coords.longitude)
+        setLan(position.coords.latitude);
+        setLon(position.coords.longitude);
       },
       (error) => console.log(error),
       { enableHighAccuracy: true }
@@ -36,35 +38,31 @@ const Map = () => {
   }, []);
 
   useEffect(() => {
-
     // const run_hospital_search_with_location_search_Value = () =>{
 
     // }
     const searchNearbyHospitals = async (latitude, longitude) => {
-      const url = `https://nominatim.openstreetmap.org/?addressdetails=1&q=${'hospital in ' + searchLocation }&format=json&limit=50&${latitude}&lon=${longitude}&zoom=18`;
+      const url = `https://nominatim.openstreetmap.org/?addressdetails=1&q=hospital in lagos&format=json&limit=50&${latitude}&lon=${longitude}&zoom=18`;
       const response = await fetch(url);
       const hospitals = await response.json();
-      console.log(latitude, longitude);
       setHospitals(hospitals);
       // use the hospitals' data to display markers on the map
     };
-    searchNearbyHospitals(lan, lon)
-    
-
-  }, [])
+    searchNearbyHospitals(lan, lon);
+  }, []);
 
   const Search = () => {
-  
     fetch(
       // `https://nominatim.openstreetmap.org/search?q=${searchLocation}&format=geojson`
-      `https://nominatim.openstreetmap.org/?addressdetails=1&q=${searchLocation}&format=json&limit=1`
+      `https://nominatim.openstreetmap.org/?addressdetails=1&q=${
+        searchLocation
+      }&format=json&limit=1`
     )
       .then((response) => response.json())
       .then((data) => {
-        setPosition([data[0]?.lat, data[0]?.lon])
-      setPlaceName(data[0].display_name );
-      }
-      )
+        setPosition([data[0]?.lat, data[0]?.lon]);
+        setPlaceName(data[0].display_name);
+      })
       .catch((error) => console.error(error));
 
     // Add this condition to check if the position is not null before rendering the map
@@ -77,20 +75,13 @@ const Map = () => {
 
   const onClickSearch = () => {
     Search();
-    run_hospital_search_with_location_search_Value();
+    setSearchLocation("");
   };
-
-  
 
   // Add this condition to check if the position is not null before rendering the map
   if (position === null) {
     return <p>Loading...</p>;
   }
-
-
-
-  
-
 
   const icon = L.icon({
     iconUrl:
@@ -100,17 +91,11 @@ const Map = () => {
     popupAnchor: [0, -38],
   });
 
-  console.log(position);
   return (
     <>
-      <div className="flex mt-14">
+      <div className="flex mt-14 flex-col-reverse input-group  lg:flex-row">
         {/* A floating group field where user can in his location to start searching */}
-        <div
-          className="px-3 flex flex-col items-center w-96"
-          style={{
-            height: "735px",
-          }}
-        >
+        <div className="px-3 flex flex-col  items-center w-full md:w-96">
           <div className="mt-5">
             <div className="flex flex-col gap-4 mt-5">
               <label className="flex flex-col gap-1">
@@ -136,38 +121,27 @@ const Map = () => {
           </div>
 
           {/*////// any other informatin from the map is displayed here /////////// */}
-          <div className="w-full  mt-5">
+          {/* <div className="w-full  mt-5">
             <h1>Your location is 5m away</h1>
-          </div>
+          </div> */}
         </div>
 
         {/* map box */}
-        <div
-
-          className=" w-full bg-green-300"
-          style={{
-            height: "735px",
-            width: "100%",
-          }}
-        >
-
-<MapContainer
-    center={position}
-    zoom={15}
-    scrollWheelZoom={true}>
-    <TileLayer
-      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    />
- <Marker position={position} icon={icon}>
-      <Popup>{placeName == '' ? 'your location' : placeName}</Popup>
-    </Marker>
-    {hospitals.map(hospital => (
-      <Marker position={[hospital.lat, hospital.lon]} icon={icon}>
-        <Popup>{hospital.display_name}</Popup>
-      </Marker>
-    ))}
-  </MapContainer>
+        <div className=" w-full bg-green-300 map-box">
+          <MapContainer center={position} zoom={12} scrollWheelZoom={true}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={position}>
+              <Popup>{placeName == "" ? "your location" : placeName}</Popup>
+            </Marker>
+            {hospitals.map((hospital) => (
+              <Marker position={[hospital.lat, hospital.lon]} icon={icon}>
+                <Popup>{hospital.display_name}</Popup>
+              </Marker>
+            ))}
+          </MapContainer>
         </div>
 
         {/*  */}

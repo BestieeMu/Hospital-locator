@@ -1,0 +1,16 @@
+.input-group {
+  height: 735px;
+}
+.map-box {
+  height: 735px;
+  width: 100%;
+}
+@media screen and (max-width: 375px) {
+  .input-group {
+    height: auto;
+    padding-bottom: 10px;
+  }
+  .map-box {
+    height: 400px;
+  }
+}
