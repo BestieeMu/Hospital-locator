@@ -19,10 +19,10 @@ const Footer = () => {
 
           <div className="w-full text-xl flex justify-center">
             <div className="flex justify-between w-7/12 md:w-6/12 lg:w-4/12  md:ml-28 lg:ml-32  mt-5">
-              <span className="bg-gray-100 p-3 rounded-2xl cursor-pointer">
+              <span className="bg-gray-100 h-14 w-14  flex justify-center  items-center rounded-3xl cursor-pointer">
                 <AiOutlineLinkedin />
               </span>
-              <span className="bg-gray-100 p-3 rounded-2xl cursor-pointer">
+              <span className="bg-gray-100 h-14 w-14 flex justify-center items-center rounded-3xl cursor-pointer">
                 <AiOutlineMail />
               </span>
             </div>

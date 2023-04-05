@@ -15,7 +15,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="locations" exact element={<Map />} />
           </Route>
-          <Route path="*" element={<Error />} />>>
+          <Route path="*" element={<Error />} />>
         </Routes>
       </div>
     </>
