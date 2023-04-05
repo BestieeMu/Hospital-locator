@@ -13,10 +13,9 @@ function App() {
         <Routes>
           <Route path="/" exact element={<LayOut />}>
             <Route index element={<Home />} />
-            <Route path="locations" exact element={<Map />} />
-            <Route path="*" element={<Error />} />
-      
+            <Route path="locations" exact element={<Map />} />      
     </Route>
+ <Route path="*" element={<Error />} />
         </Routes>
       </div>
     </>
